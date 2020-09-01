@@ -164,13 +164,19 @@ function streamHandler(stream) {
 
     var count = 0;
 
-    function addVideoStream(video, stream) {
+    function addVideoStream(video, stream, originator = false) {
         count++;
         console.log("displaying video stream " + count);
 
         videoGrid.append(video);
-        video.muted = true;
-        video.controls = true;
+
+        if (originator) {
+            video.muted = true;
+            video.controls = false;
+        } else {
+            video.muted = false;
+            video.controls = true;
+        }
 
         if ('srcObject' in video) {
             video.srcObject = stream
