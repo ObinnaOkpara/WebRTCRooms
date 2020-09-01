@@ -8,7 +8,7 @@ namespace WebRTCRooms.Hubs
 {
     public class ChatHub: Hub
     {
-        
+
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var curId = Context.ConnectionId;

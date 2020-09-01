@@ -15,14 +15,22 @@ connection.start().then(function () {
 connection.on("allrooms", function (rooms) {
     $('#rooms').html("");
     for (var i = 0; i < rooms.length; i++) {
-        $('#rooms').append(`<a href="Room?n=${rooms[i].name}" class="btn btn-primary w-100 mt-2 roombtn" 
+        if (rooms[i].count > 0) {
+            $('#rooms').append(`<a href="Room?n=${rooms[i].name}" class="btn btn-primary w-100 mt-2 roombtn" 
                                 roomname="${rooms[i].name}"> <span class="float-left">${rooms[i].name}
-                                </span> <span class="float-right">${rooms[i].count}</span></a`);
+                                </span> <span class="float-right">${rooms[i].count}</span></a>`);
+        } else {
+            $('#rooms').append(`<div class="w-100"><div class="w-100 mt-2 float-left"><a href="Room?n=${rooms[i].name}" class="btn btn-primary w-75 float-left roombtn" 
+                                roomname="${rooms[i].name}"> <span class="float-left">${rooms[i].name}
+                                </span> <span class="float-right">${rooms[i].count}</span></a>
+                                <button class="btn btn-outline-danger w-25 float-left closebtn" roomid="${rooms[i].name}">close</button>
+                                </div></div>`);
+        }
     }
 });
 
 connection.on("error", function (message) {
-    console.log(message);
+    alert(message);
 });
 
 connection.on("success", function (message) {
@@ -38,4 +46,20 @@ $('#submitroom').on('click', function () {
             return console.error(err.toString());
         });
     }
+});
+
+$('#rooms').on('click', '.closebtn', function () {
+    var roomname = $(this).attr('roomid');
+
+    connection.invoke("closeroom", roomname).catch(function (err) {
+        return console.error(err.toString());
+    });
+});
+
+$('#refreshBtn').on('click', function () {
+    $('#rooms').html('<span class="spinner-border"></span>');
+
+    connection.invoke("getrooms").catch(function (err) {
+        return console.error(err.toString());
+    });
 });

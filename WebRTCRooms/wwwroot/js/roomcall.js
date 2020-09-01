@@ -31,7 +31,7 @@ function streamHandler(stream) {
     const videoGrid = document.getElementById('video-grid');
     const mVideo = document.createElement('video');
 
-    addVideoStream(mVideo, stream);
+    addVideoStream(mVideo, stream, true);
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 
